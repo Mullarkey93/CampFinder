@@ -21,18 +21,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var campgrounds = [
+    {name: "Salmon Creek", image: "https://farm7.staticflickr.com/6035/6323442542_cab79f6497.jpg"},
+    {name: "Salmon Creek 2", image: "https://farm6.staticflickr.com/5136/5391759757_dd33e4ecc8.jpg"},
+    {name: "Salmon Creek 2", image: "https://farm3.staticflickr.com/2839/11407596925_a0f9f4abf0.jpg"},
+    {name: "Salmon Creek 2", image: "https://farm3.staticflickr.com/2286/2270488741_2a1b9822a6.jpg"}
+
+];
+
 app.get("/", function(req, res){
     res.render("landing");
 });
 
-app.get("/campgrounds", function(req, res){
-    var campgrounds = [
-        {name: "Salmon Creek", image: "https://farm7.staticflickr.com/6035/6323442542_cab79f6497.jpg"},
-        {name: "Salmon Creek 2", image: "https://farm6.staticflickr.com/5136/5391759757_dd33e4ecc8.jpg"},
-        {name: "Salmon Creek 2", image: "https://farm3.staticflickr.com/2839/11407596925_a0f9f4abf0.jpg"},
-        {name: "Salmon Creek 2", image: "https://farm3.staticflickr.com/2286/2270488741_2a1b9822a6.jpg"}
+app.post("/campgrounds", function(req, res){
+  var name = req.body.name;
+  var image = req.body.image;
+  var newCampground = {name: name, image: image};
+  campgrounds.push(newCampground);
+  res.redirect("/campgrounds");
+});
 
-    ];
+app.get("/campgrounds/new", function(req, res){
+  res.render("new.ejs");
+})
+app.get("/campgrounds", function(req, res){
     res.render("campgrounds", {campgrounds:campgrounds});
 });
 app.use('/users', users);
