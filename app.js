@@ -25,13 +25,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 
 var Campground = mongoose.model("Campground", campgroundSchema);
 
 // Campground.create(
-//     {name: "Achill Winds", image: "https://farm6.staticflickr.com/5136/5391759757_dd33e4ecc8.jpg"}, function (err, campground) {
+//     {
+//         name: "Achill Winds",
+//         image: "https://farm6.staticflickr.com/5136/5391759757_dd33e4ecc8.jpg",
+//         description: "This is a big campsite that can accommodate a small family"
+//
+//     }, function (err, campground) {
 //         if(err){
 //             console.log(err);
 //         }else{
@@ -39,6 +45,20 @@ var Campground = mongoose.model("Campground", campgroundSchema);
 //             console.log(campground);
 //         }
 //     });
+app.get("/campgrounds/new", function(req, res){
+    res.render("new.ejs");
+})
+
+app.get("/campgrounds/:id", function (req, res) {
+    Campground.findById(req.params.id, function (err, foundCampground) {
+       if(err){
+           console.log(err);
+       } else{
+           res.render('show', {campground: foundCampground});
+
+       }
+    });
+})
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -47,7 +67,8 @@ app.get("/", function(req, res){
 app.post("/campgrounds", function(req, res){
   var name = req.body.name;
   var image = req.body.image;
-  var newCampground = {name: name, image: image};
+  var desc = req.body.description;
+  var newCampground = {name: name, image: image, description: desc};
   Campground.create(newCampground, function (err, newCreated) {
       if(err){
           console.log(err);
@@ -57,15 +78,12 @@ app.post("/campgrounds", function(req, res){
   });
 });
 
-app.get("/campgrounds/new", function(req, res){
-  res.render("new.ejs");
-})
 app.get("/campgrounds", function(req, res){
     Campground.find({}, function (err, allCampgrounds) {
         if(err){
             console.log(err);
         }else{
-            res.render('campgrounds', {campgrounds:allCampgrounds})
+            res.render('index', {campgrounds:allCampgrounds})
         }
 
     });
