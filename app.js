@@ -4,9 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var Campground = require("./models/campground");
+
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/campsite')
+mongoose.connect('mongodb://localhost/campsite');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -22,14 +24,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-
-var Campground = mongoose.model("Campground", campgroundSchema);
 
 // Campground.create(
 //     {
