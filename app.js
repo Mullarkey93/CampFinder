@@ -5,8 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Campground = require("./models/campground");
-
+var seedDB = require("./seeds");
 var mongoose = require('mongoose');
+
+seedDB();
 
 mongoose.connect('mongodb://localhost/campsite');
 var index = require('./routes/index');
