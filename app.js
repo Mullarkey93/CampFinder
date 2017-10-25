@@ -27,26 +27,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Campground.create(
-//     {
-//         name: "Achill Winds",
-//         image: "https://farm6.staticflickr.com/5136/5391759757_dd33e4ecc8.jpg",
-//         description: "This is a big campsite that can accommodate a small family"
-//
-//     }, function (err, campground) {
-//         if(err){
-//             console.log(err);
-//         }else{
-//             console.log('Newly created campground');
-//             console.log(campground);
-//         }
-//     });
 app.get("/campgrounds/new", function(req, res){
     res.render("new.ejs");
 })
 
 app.get("/campgrounds/:id", function (req, res) {
-    Campground.findById(req.params.id, function (err, foundCampground) {
+    Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) {
        if(err){
            console.log(err);
        } else{
