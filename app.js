@@ -4,7 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var Campground = require("./models/campground");
+var Campground = require("./models/campground")
+var Comment = require("./models/comment");
 var seedDB = require("./seeds");
 var mongoose = require('mongoose');
 
@@ -28,19 +29,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/campgrounds/new", function(req, res){
-    res.render("new.ejs");
-})
+    res.render("campgrounds/new");
+});
 
 app.get("/campgrounds/:id", function (req, res) {
     Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) {
        if(err){
            console.log(err);
-       } else{
-           res.render('show', {campground: foundCampground});
-
+       } else {
+           res.render('campgrounds/show', {campground: foundCampground});
        }
     });
-})
+});
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -65,30 +65,44 @@ app.get("/campgrounds", function(req, res){
         if(err){
             console.log(err);
         }else{
-            res.render('index', {campgrounds:allCampgrounds})
+            res.render('campgrounds/index', {campgrounds:allCampgrounds})
         }
 
     });
-    //res.render("campgrounds", {campgrounds:campgrounds});
-});
-app.use('/users', users);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.get("/campgrounds/:id/comments/new", function(req, res){
+    Campground.findById(req.params.id, function(err, campground){
+        if(err){
+            console.log(err);
+        }else{
+            res.render("comments/new", {campground: campground});
+        }
+    });
 });
+
+app.post("/campgrounds/:id/comments", function (req, res) {
+    Campground.findById(req.params.id, function (err, campground) {
+        if(err){
+            console.log(err);
+            res.redirect("/campgrounds");
+        }else{
+           Comment.create({
+               text: req.body.text,
+               author: req.body.author
+           }, function(err, comment) {
+               if(err){
+                   console.log(err);
+               }else{
+                   campground.comments.push(comment);
+                   campground.save();
+                   res.redirect("/campgrounds/" + campground._id);
+               }
+           });
+        }
+    });
+
+});
+
 
 module.exports = app;
