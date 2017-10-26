@@ -12,16 +12,12 @@ var User = require("./models/user");
 var seedDB = require("./seeds");
 var mongoose = require('mongoose');
 
-seedDB();
-
-mongoose.connect('mongodb://localhost/campsite');
-var index = require('./routes/index');
-var users = require('./routes/users');
-
 var app = express();
+mongoose.connect('mongodb://localhost/campsite');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+seedDB();
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -30,6 +26,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(require("express-session")({
+    secret: "Rusty wins",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 app.get("/campgrounds/new", function(req, res){
     res.render("campgrounds/new");
@@ -106,6 +114,27 @@ app.post("/campgrounds/:id/comments", function (req, res) {
     });
 
 });
+
+
+//Auth Routes
+app.get("/register", function (req, res) {
+   res.render("register");
+});
+
+app.post("/register", function (req, res) {
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function (err, user) {
+        if(err){
+            console.log(err);
+            return res.render("register");
+        }else{
+            passport.authenticate("local")(req, res, function () {
+               res.redirect("/campgrounds");
+            });
+        }
+    });
+});
+
 
 
 module.exports = app;
