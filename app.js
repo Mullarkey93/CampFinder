@@ -4,8 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var Campground = require("./models/campground")
+var passport = require('passport');
+var LocalStrategy = require('passport-local');
+var Campground = require("./models/campground");
 var Comment = require("./models/comment");
+var User = require("./models/user");
 var seedDB = require("./seeds");
 var mongoose = require('mongoose');
 
