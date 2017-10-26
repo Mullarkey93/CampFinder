@@ -5,17 +5,17 @@ var data = [
     {
         name: "Clouds Rest",
         image: "https://farm4.staticflickr.com/3833/9923522516_12b572507c.jpg",
-        description: "blahblah"
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Traditur, inquit, ab Epicuro ratio neglegendi doloris. Quamvis enim depravatae non sint, pravae tamen esse possunt. In qua quid est boni praeter summam voluptatem, et eam sempiternam? Duo Reges: constructio interrete. Cum id fugiunt, re eadem defendunt, quae Peripatetici, verba. Multa sunt dicta ab antiquis de contemnendis ac despiciendis rebus humanis; Hic, qui utrumque probat, ambobus debuit uti, sicut facit re, neque tamen dividit verbis. Minime vero, inquit ille, consentit."
     },
     {
         name: "Sky Rest",
         image: "https://farm4.staticflickr.com/3833/9923522516_12b572507c.jpg",
-        description: "blah    blah"
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Traditur, inquit, ab Epicuro ratio neglegendi doloris. Quamvis enim depravatae non sint, pravae tamen esse possunt. In qua quid est boni praeter summam voluptatem, et eam sempiternam? Duo Reges: constructio interrete. Cum id fugiunt, re eadem defendunt, quae Peripatetici, verba. Multa sunt dicta ab antiquis de contemnendis ac despiciendis rebus humanis; Hic, qui utrumque probat, ambobus debuit uti, sicut facit re, neque tamen dividit verbis. Minime vero, inquit ille, consentit."
     },
     {
         name: "Achill Rest",
         image: "https://farm4.staticflickr.com/3833/9923522516_12b572507c.jpg",
-        description: "Achill Island"
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Traditur, inquit, ab Epicuro ratio neglegendi doloris. Quamvis enim depravatae non sint, pravae tamen esse possunt. In qua quid est boni praeter summam voluptatem, et eam sempiternam? Duo Reges: constructio interrete. Cum id fugiunt, re eadem defendunt, quae Peripatetici, verba. Multa sunt dicta ab antiquis de contemnendis ac despiciendis rebus humanis; Hic, qui utrumque probat, ambobus debuit uti, sicut facit re, neque tamen dividit verbis. Minime vero, inquit ille, consentit."
     }
 ];
 function seedDB() {
