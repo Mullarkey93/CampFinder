@@ -1,9 +1,61 @@
-var express = require('express');
-var router = express.Router();
+var express     = require('express');
+var router      = express.Router();
+var passport    = require('passport');
+var User        = require('../models/user');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'CampFinder' });
+// Root route
+router.get('/', function (req, res) {
+    res.render("landing");
 });
+
+//====================================
+//  AUTH ROUTES
+//====================================
+
+// Show register form
+router.get("/register", function (req, res) {
+    res.render("register");
+});
+
+// Handle signup logic
+router.post("/register", function (req, res) {
+    var newUser = new User({ username: req.body.username });
+    User.register(newUser, req.body.password, function (err, user) {
+        if (err) {
+            console.log(err);
+            return res.render('register');
+        }
+        // User 'local' strategy for login
+        passport.authenticate('local')(req, res, function () {
+            res.redirect('/campgrounds');
+        });
+    });
+});
+
+//  ------------ Show Login Form ------------
+router.get("/login", function (req, res) {
+    res.render('login');
+});
+
+router.post("/login", passport.authenticate("local", {
+    successRedirect: "/campgrounds",
+    failureRedirect: "/login"
+}), function (req, res) {
+
+});
+
+//  ------------ Show Logout Route ------------
+router.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/campgrounds');
+});
+
+// ------------- Custom Middleware ------------
+function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 module.exports = router;
