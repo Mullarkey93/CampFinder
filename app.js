@@ -1,28 +1,28 @@
-var express         = require("express"),
-    app             = express(),
-    bodyParser      = require("body-parser"),
-    mongoose        = require("mongoose"),
-    passport        = require("passport"),
-    LocalStrategy   = require("passport-local"),
-    Campground      = require('./models/campground'),
-    Comment         = require('./models/comment'),
-    User            = require('./models/user'),
-    seedDB          = require('./seeds');
-
-// Requiring Routes
-var commentRoutes       = require('./routes/comments'),
-    campgroundRoutes    = require('./routes/campgrounds'),
-    indexRoutes         = require('./routes/index');
-
+var express     = require("express"),
+    app         = express(),
+    bodyParser  = require("body-parser"),
+    mongoose    = require("mongoose"),
+    passport    = require("passport"),
+    LocalStrategy = require("passport-local"),
+    Campground  = require("./models/campground"),
+    Comment     = require("./models/comment"),
+    User        = require("./models/user"),
+    seedDB      = require("./seeds")
+    
+//requiring routes
+var commentRoutes    = require("./routes/comments"),
+    campgroundRoutes = require("./routes/campgrounds"),
+    indexRoutes      = require("./routes/index")
+    
 mongoose.connect("mongodb://localhost/campsite");
 app.use(bodyParser.urlencoded({extended: true}));
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-//seedDB();
+// seedDB(); //seed the database
 
 // PASSPORT CONFIGURATION
-app.use(require("express-session") ({
-    secret: "mullarkey",
+app.use(require("express-session")({
+    secret: "Mullarkey",
     resave: false,
     saveUninitialized: false
 }));
@@ -32,16 +32,16 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function (req, res, next) {
-    res.locals.currentUser = req.user;
-    next();
+app.use(function(req, res, next){
+   res.locals.currentUser = req.user;
+   next();
 });
 
 app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
-app.use("/campgrounds/:id/comments",commentRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
 
 
-app.listen(3000, function () {
-    console.log("Server is running...");
+app.listen(3000, function(){
+   console.log("Server Has Started!");
 });
